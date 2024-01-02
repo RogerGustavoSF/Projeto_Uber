@@ -85,7 +85,7 @@ UPDATE passageiros SET nome = 'Isabela' WHERE telefone = '(51)96666-6666';
 
 
 -- Selecionando e retornando valores das tabelas:
--- Retornando o nome do motorista, o nome do passageiro e a distância percorrida para todas as viagens com mais de 10 km.
+-- Retornando o nome do motorista, o nome do passageiro e a distância percorrida para todas as viagens com mais de 40 km.
 SELECT m.nome AS nome_motorista, p.nome AS nome_passageiro, v.distancia_km FROM viagens v
 JOIN motoristas m ON v.id_motorista = m.id
 JOIN passageiros p ON v.id_passageiro = p.id WHERE CAST(v.distancia_km AS DECIMAL(8,2)) > 40.0;
