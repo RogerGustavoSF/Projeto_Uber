@@ -1,2 +1,2 @@
-# Projeto_Uber
-Banco de dados desenvolvido em MySQL inspirado no aplicativo Uber.
+# Uber_Project
+Database developed in MySQL and inspired by the Uber app.
