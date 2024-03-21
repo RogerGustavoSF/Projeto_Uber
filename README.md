@@ -1,2 +1,2 @@
-# Uber_Project
-Database developed in MySQL and inspired by the Uber app.
+# UberAppProject
+Database developed in MySQL and SQLServer inspired by the Uber app.
