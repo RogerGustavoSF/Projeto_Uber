@@ -1,63 +1,50 @@
 CREATE DATABASE uber;
+USE uber;
 
--- Criando as tabelas:
-CREATE TABLE motoristas (
-id INT NOT NULL AUTO_INCREMENT UNIQUE,
-nome VARCHAR(30) NOT NULL,
-placa_veiculo VARCHAR(7) NOT NULL,
-avaliacao_media DECIMAL(3,2) NOT NULL,
-
-PRIMARY KEY (id)
+CREATE TABLE drivers (
+id TINYINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name_driver VARCHAR(50) NOT NULL,
+vehicle_plate VARCHAR(7) NOT NULL,
+avg_rating DECIMAL(3,2) NOT NULL,
+phone_driver VARCHAR(14) NOT NULL
 );
 
-CREATE TABLE passageiros (
-id INT NOT NULL AUTO_INCREMENT UNIQUE,
-nome VARCHAR(30) NOT NULL,
-telefone VARCHAR(14) NOT NULL,
-
-PRIMARY KEY (id)
+CREATE TABLE passengers (
+id TINYINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name_psg VARCHAR(50) NOT NULL,
+phone_psg VARCHAR(14) NOT NULL
 );
 
-CREATE TABLE viagens (
-id INT NOT NULL AUTO_INCREMENT UNIQUE,
-id_motorista INT NOT NULL,
-id_passageiro INT NOT NULL,
-data_hora DATETIME NOT NULL,
-origem VARCHAR(30) NOT NULL,
-destino VARCHAR(30) NOT NULL,
-distancia_km INT NOT NULL,
-preco DECIMAL(5,2) NOT NULL,
-
-FOREIGN KEY (id_motorista) REFERENCES motoristas(id),
-FOREIGN KEY (id_passageiro) REFERENCES passageiros(id),
-PRIMARY KEY (id)
+CREATE TABLE trips (
+id TINYINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+id_driver TINYINT NOT NULL,
+id_psg TINYINT NOT NULL,
+date_time DATETIME NOT NULL,
+origin VARCHAR(30) NOT NULL,
+destination VARCHAR(30) NOT NULL,
+distance_km SMALLINT NOT NULL,
+price DECIMAL(5,2) NOT NULL,
+FOREIGN KEY (id_driver) REFERENCES drivers(id),
+FOREIGN KEY (id_psg) REFERENCES passengers(id)
 );
 
+INSERT INTO drivers VALUES
+(DEFAULT, 'Noah', 'ABC1D23', 4.77, '(51)98765-4321'),
+(DEFAULT, 'Robert', 'EFG4H56', 5.00, '(51)97654-3210'),
+(DEFAULT, 'Matt', 'IJK78L9', 3.00, '(51)96543-2198'),
+(DEFAULT, 'Mary', 'ZDB6E87', 4.55, '(51)95432-1987'),
+(DEFAULT, 'John', 'LQG3P54', 2.80, '(51)94321-9876');
 
--- Inserindo valores às tabelas:
-INSERT INTO motoristas VALUES
-(DEFAULT, 'Fernando', 'ABC1D23', 4.77),
-(DEFAULT, 'Roberta', 'EFG4H56', 5.00),
-(DEFAULT, 'Lucas', 'IJK78L9', 3.00),
-(DEFAULT, 'Mariana', 'ZDB6E87', 4.55),
-(DEFAULT, 'Nicolas', 'LQG3P54', 2.80)
-;
+INSERT INTO passengers VALUES
+(DEFAULT, 'Victor', '(51)99999-9999'),
+(DEFAULT, 'Emma', '(51)98888-8888'),
+(DEFAULT, 'Thomas', '(51)97777-7777'),
+(DEFAULT, 'Gabriel', '(51)96666-6666'),
+(DEFAULT, 'Michael', '(51)95555-5555'),
+(DEFAULT, 'Olivia', '(51)94444-4444'),
+(DEFAULT, 'Dave', '(51)93333-3333');
 
-SELECT * FROM motoristas;
-
-INSERT INTO passageiros VALUES
-(DEFAULT, 'Vitor', '(51)99999-9999'),
-(DEFAULT, 'Laura', '(51)98888-8888'),
-(DEFAULT, 'Heitor', '(51)97777-7777'),
-(DEFAULT, 'Gabriela', '(51)96666-6666'),
-(DEFAULT, 'Michel', '(51)95555-5555'),
-(DEFAULT, 'Nicole', '(51)94444-4444'),
-(DEFAULT, 'Benjamin', '(51)93333-3333')
-;
-
-SELECT * FROM passageiros;
-
-INSERT INTO viagens VALUES
+INSERT INTO trips VALUES
 (DEFAULT, 1, 1, '2023-01-30 10:00:00', 'São Leopoldo', 'Canudos', 11.8, 22.90),
 (DEFAULT, 1, 2, '2023-02-27 11:00:00', 'Esteio', 'Caxias do Sul', 104.0, 158.58),
 (DEFAULT, 1, 3, '2023-03-25 12:00:00', 'Erechim', 'Estância Velha', 337.0, 469.96),
@@ -67,47 +54,50 @@ INSERT INTO viagens VALUES
 (DEFAULT, 2, 7, '2023-07-10 16:00:00', 'Sapiranga', 'Novo Hamburgo', 16.6, 26.90),
 (DEFAULT, 4, 3, '2023-08-07 17:00:00', 'Parobé', 'Ivoti', 41.4, 63.85),
 (DEFAULT, 4, 4, '2023-09-05 18:00:00', 'Montenegro', 'Portão', 27.8, 49.97),
-(DEFAULT, 4, 5, '2023-10-03 19:00:00', 'Canela', 'Campo Bom', 74.8, 140.48)
-;
+(DEFAULT, 4, 5, '2023-10-03 19:00:00', 'Canela', 'Campo Bom', 74.8, 140.48);
 
-SELECT * FROM viagens;
-
-
--- Atualizando as tabelas:
 SET SQL_SAFE_UPDATES = 0;
-UPDATE motoristas SET placa_veiculo = 'DEF789' WHERE nome = 'Róger';
-UPDATE motoristas SET avaliacao_media = 0.5 WHERE avaliacao_media >= 4.0;
-UPDATE viagens SET preco = 20.0 WHERE data_hora < '2023-06-01';
-UPDATE viagens SET destino = 'Porto Alegre' WHERE origem = 'São Leopoldo';
-UPDATE viagens SET preco = 250.00 WHERE id_motorista = 1 AND id_passageiro = 2;
-UPDATE passageiros SET telefone = '(51)91111-1111' WHERE nome = 'Vitor';
-UPDATE passageiros SET nome = 'Isabela' WHERE telefone = '(51)96666-6666';
+UPDATE drivers SET vehicle_plate = 'DEF789' WHERE name_driver = 'Robert';
+UPDATE drivers SET avg_rating = 0.5 WHERE avg_rating >= 4.0;
+UPDATE trips SET price = 20.0 WHERE date_time < '2023-06-01';
+UPDATE trips SET destination = 'Porto Alegre' WHERE origin = 'São Leopoldo';
+UPDATE trips SET price = 250.00 WHERE id_driver = 1 AND id_psg = 2;
+UPDATE passengers SET phone_psg = '(51)91111-1111' WHERE name_psg = 'Victor';
+UPDATE passengers SET name_psg = 'Isabella' WHERE phone_psg = '(51)96666-6666';
 
+-- Some SELECTs for demonstration:
+-- Returning the name of the driver, the name of the passenger, and the distance traveled for all trips over 10 km.
+SELECT drivers.name_driver AS Driver_name, passengers.name_psg AS Name_passenger, trips.distance_km 
+FROM trips
+JOIN drivers ON trips.id_driver = drivers.id
+JOIN passengers ON trips.id_psg = passengers.id 
+WHERE CAST(trips.distance_km AS DECIMAL(8,2)) > 10.0;
 
--- Selecionando e retornando valores das tabelas:
--- Retornando o nome do motorista, o nome do passageiro e a distância percorrida para todas as viagens com mais de 10 km.
-SELECT m.nome AS nome_motorista, p.nome AS nome_passageiro, v.distancia_km FROM viagens v
-JOIN motoristas m ON v.id_motorista = m.id
-JOIN passageiros p ON v.id_passageiro = p.id WHERE CAST(v.distancia_km AS DECIMAL(8,2)) > 40.0;
+-- Returning the average rating of drivers:
+SELECT ROUND(AVG(avg_rating), 2) AS Avg_rating FROM drivers;
 
--- Retornando a avaliação média dos motoristas:
-SELECT AVG(avaliacao_media) FROM motoristas;
+-- Listing all drivers who have not made any trips yet:
+SELECT drivers.name_driver AS Driver_name 
+FROM drivers 
+LEFT JOIN trips ON drivers.id = trips.id_driver 
+WHERE trips.id IS NULL;
 
--- Listando todos os motoristas que ainda não fizeram nenhuma viagem:
-SELECT m.nome FROM motoristas m LEFT JOIN viagens v ON m.id = v.id_motorista WHERE v.id IS NULL;
+-- Listing the average distance traveled for all trips and the average price of trips:
+SELECT ROUND(AVG(distance_km), 2) AS Avg_kmDistance, ROUND(AVG(price), 2) AS Avg_price 
+FROM trips;
 
--- Listando a média de distância percorrida por todas as viagens e a média de preço das viagens:
-SELECT AVG(distancia_km), AVG(preco) FROM viagens;
+-- Some DELETEs for demonstration:
+DELETE FROM trips 
+WHERE distance_km < 5.0;
+DELETE FROM trips 
+WHERE date_time < '2023-08-30 15:30:00';
+DELETE FROM drivers 
+WHERE name_driver = 'Noah';
+DELETE FROM passengers 
+WHERE phone_psg = '(51)94444-4444';
+DELETE FROM trips 
+WHERE price > 200.00;
+DELETE FROM trips 
+WHERE id_driver = 1;
 
-
--- Deletando viagens:
-DELETE FROM viagens WHERE distancia_km < 5.0;
-DELETE FROM viagens WHERE data_hora < '2023-08-30 15:30:00';
-DELETE FROM motoristas WHERE nome = 'Lucas';
-DELETE FROM passageiros WHERE telefone = '(51)94444-4444';
-DELETE FROM viagens WHERE preco > 200.00;
-DELETE FROM viagens WHERE id_motorista = 1;
-
-DELETE FROM viagens;
-
-SELECT * FROM viagens;
+DELETE FROM trips;
