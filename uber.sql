@@ -1,6 +1,6 @@
 -- Creating the database and using it
-CREATE DATABASE db_uber;
-USE db_uber;
+CREATE DATABASE uber_db;
+USE uber_db;
 
 -- Creating the drivers table
 CREATE TABLE drivers (
